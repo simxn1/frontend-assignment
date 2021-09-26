@@ -36,10 +36,8 @@ export default function UploadImage({ galleryName }: Props) {
             }
 
             Promise.all(imagesUploaded)
-                .then(() => console.log("uploaded"))
+                .then(() => window.location.reload())
                 .catch(err => console.log(err));
-
-            window.location.reload();
         }
     }
 
@@ -62,10 +60,16 @@ export default function UploadImage({ galleryName }: Props) {
                                 name="image"
                                 multiple
                             />
-                            <img src="/assets/icons/add-photo.svg" height={75} width={75} alt={""} />
-                            <Heading label="sem presuňte fotky" className="text-gray-400 font-bold text-center" />
-                            <Heading label="alebo vyberte súbory kliknutím" className="text-gray-400 font-bold text-center" />
-                            <Heading label="(jpg)" className="text-gray-400 font-bold text-center" />
+                            {files?.length ?
+                                <Heading label="✅" className="text-gray-400 font-bold text-center text-5xl" />
+                                :
+                                <>
+                                    <img src="/assets/icons/add-photo.svg" height={75} width={75} alt={""} />
+                                    <Heading label="sem presuňte fotky" className="text-gray-400 font-bold text-center" />
+                                    <Heading label="alebo vyberte súbory kliknutím" className="text-gray-400 font-bold text-center" />
+                                    <Heading label="(jpg)" className="text-gray-400 font-bold text-center" />
+                                </>
+                            }
                         </div>
                         <button onClick={handleSend} className="self-end text-white text-sm bg-green-500 uppercase px-6 py-4 rounded-sm">+ pridať</button>
                 </div>
