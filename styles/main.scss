@@ -1,0 +1,24 @@
+.category-preview {
+  min-width: 300px;
+
+  .title-img {
+    height: 11rem;
+    transition: height 0.5s;
+    border-radius: 5px 5px 0 0;
+  }
+
+  .info {
+    height: 4rem;
+    transition: height 0.5s;
+  }
+
+  &:hover {
+    .title-img {
+      height: 9rem;
+    }
+
+    .info {
+      height: 6rem;
+    }
+  }
+}

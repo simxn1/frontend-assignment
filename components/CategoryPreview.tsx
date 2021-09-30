@@ -42,11 +42,11 @@ export default function CategoryPreview({ name, imgPath }: Props) {
     return (
          <Link href={"/" + name}>
              <a onMouseEnter={toggleImagesNumberVisible} onMouseLeave={toggleImagesNumberVisible}>
-                 <div style={{ minWidth: "300px" }} className="relative z-10 my-4 shadow-lg max-h-60">
+                 <div className="relative z-10 my-4 shadow-lg max-h-60 category-preview">
                      <div className="border-2 border-transparent" style={{ borderBottom: 0 }}>
-                         <div className={(imagesNumberVisible ? "h-36" : "h-44")} style={{ backgroundImage: `url(${getCategoryImgPath()})`, borderRadius: "5px 5px 0 0" }} />
+                         <div className="title-img" style={{ backgroundImage: `url(${getCategoryImgPath()})` }} />
                      </div>
-                     <div className={(imagesNumberVisible ? "h-24" : "h-16") + " py-4 border-2 border-gray-100 text-center"} style={{ borderTop: 0, borderRadius: "0 0 5px 5px" }}>
+                     <div className="py-4 border-2 border-gray-100 text-center info" style={{ borderTop: 0, borderRadius: "0 0 5px 5px" }}>
                          <Heading label={name} className="text text-gray-600 font-semibold" />
                          <div className={"text-gray-300 transition opacity duration-500 opacity-0 " + (imagesNumberVisible ? "opacity-100" : "")}>
                              {imagesNumber ?? ""} fotiek

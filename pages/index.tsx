@@ -13,8 +13,10 @@ interface Props {
 const Home = ({ categories }: Props) => {
     const [currentlyHovered, setCurrentlyHovered] = useState<number>(0);
 
+    let debouncedNewCurrentlyHoveredTimer: ReturnType<typeof setTimeout>
     function setNewCurrentlyHovered(index: number) {
-        setCurrentlyHovered(index);
+        clearTimeout(debouncedNewCurrentlyHoveredTimer)
+        debouncedNewCurrentlyHoveredTimer = setTimeout(() => setCurrentlyHovered(index), 500)
     }
 
   return (
