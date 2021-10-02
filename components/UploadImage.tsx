@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import Image from "next/image";
 import Heading from "./Heading";
 import Overlay from "./Overlay";
-import {endpoints} from "../lib/constants";
+import {uploadImagesToGallery} from "../lib/api";
+import {toggleState} from "../lib/utils";
 
 interface Props {
     galleryName: string;
@@ -12,10 +13,6 @@ export default function UploadImage({ galleryName }: Props) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [files, setFiles] = useState<FileList | null>();
 
-    function toggleIsOpen() {
-        setIsOpen(prevState => !prevState);
-    }
-
     function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         setFiles(event.target.files);
     }
@@ -24,32 +21,19 @@ export default function UploadImage({ galleryName }: Props) {
         event.preventDefault();
 
         if (files) {
-            let imagesUploaded = [];
-            for (const file of Object.entries(files)) {
-                const formData = new FormData();
-                formData.append("image", file[1]);
-                const res = fetch(process.env.NEXT_PUBLIC_API_URL + endpoints.gallery + "/" + galleryName, {
-                    method: "POST",
-                    body: formData
-                });
-                imagesUploaded.push(res);
-            }
-
-            Promise.all(imagesUploaded)
-                .then(() => window.location.reload())
-                .catch(err => console.log(err));
+            await uploadImagesToGallery(galleryName, files);
         }
     }
 
     return (
         <>
-            <div onClick={toggleIsOpen} style={{ minWidth: "300px", minHeight: "200px", height: "90%", borderRadius: "5px" }} className="bg-white cursor-pointer flex flex-col items-center justify-center gap-3 relative z-10 pb-10 shadow-lg max-w-xs">
-                <Image src="/assets/icons/add-photo.svg" height={75} width={75} />
+            <div onClick={() => toggleState(setIsOpen)} className="bg-white cursor-pointer flex flex-col items-center justify-center gap-3 relative z-10 m-4 pb-10 shadow-lg max-w-xs upload-photos">
+                <Image src="/assets/icons/add-photo.svg" height={75} width={75} alt={""} />
                 <Heading label="pridať fotky" className="text-gray-400 font-bold text-center" />
             </div>
             {isOpen &&
-            <Overlay isOpen={isOpen} setIsOpen={setIsOpen}>
-                <div className="flex flex-col bg-white w-2/3 md:w-1/3 p-4">
+            <Overlay wrapperClassName="flex flex-col bg-white w-2/3 md:w-1/3 p-4" isOpen={isOpen} setIsOpen={setIsOpen}>
+                <>
                     <Heading label="pridať fotky" className="text-lg text-gray-600" />
                         <div className="relative flex flex-col items-center gap-3 border-2 border-gray-400 border-dashed p-5 my-8">
                             <input
@@ -72,7 +56,7 @@ export default function UploadImage({ galleryName }: Props) {
                             }
                         </div>
                         <button onClick={handleSend} className="self-end text-white text-sm bg-green-500 uppercase px-6 py-4 rounded-sm">+ pridať</button>
-                </div>
+                </>
             </Overlay>
             }
         </>

@@ -4,14 +4,15 @@ import {ICategory} from "../lib/interfaces";
 import CategoryPreview from "../components/CategoryPreview";
 import CreateGallery from "../components/CreateGallery";
 import React, {useState} from "react";
-import {endpoints} from "../lib/constants";
+import {getAllCategories} from "../lib/api";
 
 interface Props {
-    categories: ICategory[];
+    initialCategories: ICategory[];
 }
 
-const Home = ({ categories }: Props) => {
+const Home = ({ initialCategories }: Props) => {
     const [currentlyHovered, setCurrentlyHovered] = useState<number>(0);
+    const [categories, setCategories] = useState<ICategory[]>(initialCategories)
 
     let debouncedNewCurrentlyHoveredTimer: ReturnType<typeof setTimeout>
     function setNewCurrentlyHovered(index: number) {
@@ -27,15 +28,15 @@ const Home = ({ categories }: Props) => {
 
       <main>
           <Header title="fotogaléria" coverImage={categories[currentlyHovered].image?.fullpath} subtitle="kategórie" hasBack={false} />
-          <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center">
+          <div className="container mt-8 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-16 gap-y-14 place-items-center md:place-items-stretch">
               {categories.map((category, index) => {
                   return (
                       <div key={category.name} onMouseEnter={() => setNewCurrentlyHovered(index)}>
-                          <CategoryPreview name={category.name} imgPath={category.image?.fullpath} />
+                          <CategoryPreview name={category.name ?? ""} imgPath={category.image?.fullpath} categories={categories} setCategories={setCategories} />
                       </div>
                   )
               })}
-              <CreateGallery />
+              <CreateGallery setCategories={setCategories} />
           </div>
       </main>
     </div>
@@ -43,10 +44,9 @@ const Home = ({ categories }: Props) => {
 }
 
 export async function getServerSideProps() {
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + endpoints.gallery);
-    const json = await res.json();
+    const initialCategories = await getAllCategories();
     return {
-        props: { categories: json.galleries }
+        props: { initialCategories }
     }
 }
 

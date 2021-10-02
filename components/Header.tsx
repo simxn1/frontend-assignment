@@ -39,7 +39,7 @@ export default function Header({ coverImage, title, subtitle, hasBack }: Props) 
                     </Link>}
                     <Heading className="text-lg ml-4" label={subtitle} />
                 </div>
-                <div className="w-full h-0.5 my-2" style={{ backgroundColor: "rgba(255, 255, 255, 0.2)" }} />
+                <div className="w-full h-0.5 my-2 header-border" />
             </div>
         </div>
     )

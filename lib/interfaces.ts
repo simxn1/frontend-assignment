@@ -1,7 +1,12 @@
 export interface ICategory {
-    path: string,
-    image: IImage,
-    name: string;
+    path?: string,
+    name?: string;
+    image?: IImage,
+    images?: IImage[];
+    gallery?: {
+        path: string
+        name: string;
+    }
 }
 
 export interface IImage {
